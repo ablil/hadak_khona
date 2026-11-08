@@ -1,6 +1,21 @@
-# Cloudflare Pages: the OG image is exported without an extension.
+# Cloudflare Pages headers.
+
+# Hashed build assets (CSS, fonts) never change.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML: always revalidate (cheap 304 via ETag) so deploys show up immediately.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Unhashed paths: cache a day, refresh in the background.
+/icon.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# The OG image is exported without an extension.
 /opengraph-image
   Content-Type: image/png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
 /*
   X-Robots-Tag: noindex, nofollow

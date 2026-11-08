@@ -1,5 +1,5 @@
 /* Plain CSS (not a module): the turbopack *.css rule in next.config.ts strips CSS module exports.
-   One 1.95s master timeline; keyframe % maps to time (15.4% = 0.3s). */
+   One 1.95s master timeline; keyframe % maps to time (15.4% = 0.3s). Typing starts after it (see hero.tsx). */
 
 .atay-zellige {
   position: absolute;
@@ -115,11 +115,46 @@
   50% { opacity: 0; }
 }
 
+/* typing: each char appears at --at; its cursor shows for --hold (absolutely positioned, no layout shift) */
+.atay-char {
+  position: relative;
+  visibility: hidden;
+  animation: atay-show 1ms steps(1) var(--at) forwards;
+}
+@keyframes atay-show {
+  to { visibility: visible; }
+}
+.atay-char::after {
+  content: "";
+  position: absolute;
+  left: calc(100% + 0.15em);
+  top: 0.12em;
+  width: 0.5em;
+  height: 1em;
+  background: var(--accent);
+  visibility: hidden;
+  animation: atay-cursor var(--hold) steps(1) var(--at);
+}
+@keyframes atay-cursor {
+  from, to { visibility: visible; }
+}
+.atay-char-cursor-final::after {
+  animation: atay-cursor-final 1s steps(1) var(--at) infinite;
+}
+@keyframes atay-cursor-final {
+  0% { visibility: visible; }
+  50% { visibility: hidden; }
+}
+
 /* reduced motion: final frame only */
 @media (prefers-reduced-motion: reduce) {
   .atay-scene *,
-  .atay-blink { animation: none !important; }
+  .atay-blink,
+  .atay-char,
+  .atay-char::after { animation: none !important; }
   .atay-glass,
   .atay-sparkles { opacity: 0; }
   .atay-laptop { opacity: 1; }
+  .atay-char,
+  .atay-char-cursor-final::after { visibility: visible; }
 }

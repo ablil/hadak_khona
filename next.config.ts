@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   output: "export",
   experimental: {
     agentFeedback: true,
+    // Most visitors are first-timers from Twitter: inline CSS to skip the render-blocking request.
+    inlineCss: true,
   },
   turbopack: {
     rules: {

@@ -1,61 +1,53 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import { KAS, LAPTOP, LINE1, LINE2, POT, SPARKLES, VIEWBOX, sparklePath } from "./art";
 import "./hero.css";
 
-const ANIM_MS = 1950;
+// Typing is pure CSS (no client JS): every character is revealed at its own delay.
+// Keep TYPE_START_MS just after the scene timeline in hero.css (--t: 1.95s).
+const TYPE_START_MS = 2050;
 const CHAR_MS = 28;
 const LINE_PAUSE_MS = 200;
+const LINE2_START_MS = TYPE_START_MS + LINE1.length * CHAR_MS + LINE_PAUSE_MS;
 
 export function Hero() {
-  const [typed, setTyped] = useState(0);
-
-  useEffect(() => {
-    const total = LINE1.length + LINE2.length;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      const t = setTimeout(() => setTyped(total), 0);
-      return () => clearTimeout(t);
-    }
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    let at = ANIM_MS + 100;
-    for (let i = 1; i <= total; i++) {
-      if (i === LINE1.length + 1) at += LINE_PAUSE_MS;
-      timers.push(setTimeout(() => setTyped(i), at));
-      at += CHAR_MS;
-    }
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
-  const t1 = Math.min(typed, LINE1.length);
-  const t2 = Math.max(0, typed - LINE1.length);
-  const onLine2 = typed > LINE1.length;
-
   return (
     <div className="relative flex flex-col gap-4 md:gap-6">
       <Scene />
       <h1 className="text-[34px] font-medium tracking-[-0.02em] md:text-[56px]">
         <span className="sr-only">{LINE1}</span>
-        <span aria-hidden>
-          {LINE1.slice(0, t1)}
-          {typed > 0 && !onLine2 && <Cursor />}
-          <span className="invisible">{LINE1.slice(t1)}</span>
-        </span>
+        <Typed text={LINE1} start={TYPE_START_MS} next={LINE2_START_MS} />
       </h1>
       <p className="max-w-[310px] text-[15px] leading-[1.5] text-muted md:max-w-none md:text-[22px]">
         <span className="sr-only">{LINE2}</span>
-        <span aria-hidden>
-          {LINE2.slice(0, t2)}
-          {onLine2 && <Cursor />}
-          <span className="invisible">{LINE2.slice(t2)}</span>
-        </span>
+        <Typed text={LINE2} start={LINE2_START_MS} last />
       </p>
     </div>
   );
 }
 
-function Cursor() {
-  return <span className="atay-blink ml-[0.15em] inline-block h-[1em] w-[0.5em] translate-y-[0.12em] bg-accent" />;
+// `next` = when the following line starts; the cursor sits on this line's last char until then.
+// `last` = the final line keeps a blinking cursor after typing ends.
+function Typed({ text, start, next, last }: { text: string; start: number; next?: number; last?: boolean }) {
+  const chars = [...text];
+  return (
+    <span aria-hidden>
+      {chars.map((ch, i) => {
+        const at = start + i * CHAR_MS;
+        const isEnd = i === chars.length - 1;
+        const hold = isEnd ? (next ?? at + CHAR_MS) - at : CHAR_MS;
+        const cursor = isEnd && last ? "atay-char-cursor-final" : "";
+        return (
+          <span
+            key={i}
+            className={`atay-char ${cursor}`}
+            style={{ "--at": `${at}ms`, "--hold": `${hold}ms` } as CSSProperties}
+          >
+            {ch}
+          </span>
+        );
+      })}
+    </span>
+  );
 }
 
 function Scene() {
