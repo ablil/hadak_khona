@@ -6,5 +6,11 @@
   "assets": {
     "directory": "./out",
     "not_found_handling": "404-page"
+  },
+  // Workers Logs + traces, every request (low traffic, well under the daily log cap).
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "traces": { "enabled": true }
   }
 }
