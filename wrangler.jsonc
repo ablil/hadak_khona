@@ -1,0 +1,10 @@
+// Assets-only Worker: serves the static export in out/ (no Worker script, no OpenNext).
+// Without this file `wrangler deploy` auto-detects Next.js and tries to set up OpenNext.
+{
+  "name": "hadak-khona",
+  "compatibility_date": "2026-11-04",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
