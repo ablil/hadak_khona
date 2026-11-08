@@ -115,14 +115,14 @@
   50% { opacity: 0; }
 }
 
-/* typing: each char appears at --at; its cursor shows for --hold (absolutely positioned, no layout shift) */
+/* typing: each char is hidden only by the animation's backwards fill until --at, so text stays
+   visible if the browser skips the animation. Its cursor shows for --hold (absolutely positioned, no layout shift). */
 .atay-char {
   position: relative;
-  visibility: hidden;
-  animation: atay-show 1ms steps(1) var(--at) forwards;
+  animation: atay-hide 1ms steps(1) var(--at) backwards;
 }
-@keyframes atay-show {
-  to { visibility: visible; }
+@keyframes atay-hide {
+  from, to { opacity: 0; }
 }
 .atay-char::after {
   content: "";
@@ -155,6 +155,5 @@
   .atay-glass,
   .atay-sparkles { opacity: 0; }
   .atay-laptop { opacity: 1; }
-  .atay-char,
   .atay-char-cursor-final::after { visibility: visible; }
 }
