@@ -1,0 +1,125 @@
+/* Plain CSS (not a module): the turbopack *.css rule in next.config.ts strips CSS module exports.
+   One 1.95s master timeline; keyframe % maps to time (15.4% = 0.3s). */
+
+.atay-zellige {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-position: center;
+  mask-image: radial-gradient(ellipse at center, transparent 25%, black 75%);
+}
+
+.atay-scene {
+  --t: 1.95s;
+  overflow: visible;
+}
+
+.atay-scene * {
+  transform-box: view-box;
+}
+
+.atay-line {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* teapot: lift + tilt, hold while pouring, set back down */
+.atay-pot {
+  transform-origin: 70px 108px;
+  animation: atay-pot var(--t) cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes atay-pot {
+  0% { transform: none; }
+  15.4%, 61.5% { transform: translate(0, -55px) rotate(35deg); }
+  76.9%, 100% { transform: none; }
+}
+
+.atay-stream {
+  fill: none;
+  stroke: var(--tea);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 100 100;
+  animation: atay-stream var(--t) linear both;
+}
+@keyframes atay-stream {
+  0%, 15.4% { stroke-dashoffset: 100; }
+  23%, 57.7% { stroke-dashoffset: 0; }
+  65.4%, 100% { stroke-dashoffset: -100; }
+}
+
+.atay-tea {
+  fill: var(--tea);
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: atay-tea var(--t) cubic-bezier(0.3, 0, 0.3, 1) both;
+}
+@keyframes atay-tea {
+  0%, 19.2% { transform: scaleY(0); }
+  65.4%, 100% { transform: scaleY(1); }
+}
+
+.atay-garnish {
+  animation: atay-garnish var(--t) ease-out both;
+}
+@keyframes atay-garnish {
+  0%, 65.4% { opacity: 0; }
+  73%, 100% { opacity: 1; }
+}
+.atay-steam {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-opacity: 0.45;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+/* magic: glass out, laptop in */
+.atay-glass {
+  transform-origin: 160px 104px;
+  animation: atay-glass var(--t) ease-in both;
+}
+@keyframes atay-glass {
+  0%, 76.9% { opacity: 1; transform: none; }
+  92.3%, 100% { opacity: 0; transform: scale(1.35, 0.85); }
+}
+
+.atay-laptop {
+  transform-origin: 160px 106px;
+  animation: atay-laptop var(--t) cubic-bezier(0.2, 0.8, 0.2, 1.2) both;
+}
+@keyframes atay-laptop {
+  0%, 80.8% { opacity: 0; transform: scale(0.6, 1.1); }
+  96% { opacity: 1; transform: scale(1.03); }
+  100% { opacity: 1; transform: none; }
+}
+
+.atay-sparkles path {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: atay-sparkle var(--t) ease-out both;
+}
+@keyframes atay-sparkle {
+  0%, 76.9% { opacity: 0; transform: scale(0); }
+  85% { opacity: 1; transform: scale(1) rotate(45deg); }
+  100% { opacity: 0; transform: scale(0.4) rotate(90deg); }
+}
+
+.atay-blink {
+  animation: atay-blink 1s steps(1) infinite;
+}
+@keyframes atay-blink {
+  50% { opacity: 0; }
+}
+
+/* reduced motion: final frame only */
+@media (prefers-reduced-motion: reduce) {
+  .atay-scene *,
+  .atay-blink { animation: none !important; }
+  .atay-glass,
+  .atay-sparkles { opacity: 0; }
+  .atay-laptop { opacity: 1; }
+}
