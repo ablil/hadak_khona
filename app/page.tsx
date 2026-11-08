@@ -10,6 +10,14 @@ export default function Home() {
     <main className="relative flex min-h-dvh items-center justify-center overflow-hidden px-6">
       <div aria-hidden className="atay-zellige" style={{ backgroundImage: `url("data:image/svg+xml,${tile}")` }} />
       <Hero />
+      <a
+        href="https://x.com/hadak_khona"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[11px] text-muted opacity-60 transition-opacity hover:opacity-100"
+      >
+        @hadak_khona
+      </a>
     </main>
   );
 }
