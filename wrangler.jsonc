@@ -3,6 +3,8 @@
 {
   "name": "hadak-khona",
   "compatibility_date": "2026-11-04",
+  // Serve on hadak-khona.ablil.workers.dev (otherwise error 1042).
+  "workers_dev": true,
   "assets": {
     "directory": "./out",
     "not_found_handling": "404-page"

@@ -19,8 +19,10 @@ for (const file of entries.filter((f) => f.endsWith(".html"))) {
   await writeFile(path, strip(html));
 }
 
-// JS chunks and RSC payloads are now unreferenced.
-for (const file of entries.filter((f) => f.endsWith(".txt") || (f.startsWith(join("_next", "static")) && f.endsWith(".js")))) {
+// JS chunks and RSC payloads are now unreferenced. Keep robots.txt (Twitterbot needs its allow rule).
+const unreferenced = (f) =>
+  (f.endsWith(".txt") && f !== "robots.txt") || (f.startsWith(join("_next", "static")) && f.endsWith(".js"));
+for (const file of entries.filter(unreferenced)) {
   await rm(join(OUT, file), { force: true });
 }
 

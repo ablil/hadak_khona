@@ -9,8 +9,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  // Absolute base for og:image / twitter:image URLs; set SITE_URL at build time.
-  metadataBase: new URL(process.env.SITE_URL ?? "http://localhost:3000"),
+  // Absolute base for og:image / twitter:image URLs; override with SITE_URL for another domain.
+  metadataBase: new URL(process.env.SITE_URL ?? "https://hadak-khona.ablil.workers.dev"),
   title: "hadak_khona",
   description: LINE2,
   applicationName: "hadak_khona",
